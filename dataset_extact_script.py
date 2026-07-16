@@ -1,3 +1,4 @@
+# 这个脚本用于从rawdata目录下的json文件中提取数据，并保存为一个包含指定列的csv文件
 import json
 from pathlib import Path
 
