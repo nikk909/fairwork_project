@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-
 import json
 from pathlib import Path
 
@@ -26,13 +23,31 @@ FIELD_MAP = {
     "bid_stats.bid_count": "bid_count",
     "bid_stats.bid_avg": "bid_avg",
     "local": "local",
-    "location.country.name": "location_country",
     "language": "language",
 }
+# 国家默认 Germany（抓取侧已限定，此处不采集）；语言默认 en / de
 
-
+#处理job数组的嵌入字段,将jobs数组中的name和category.name和category.id提取并拼成字符串
 def extract_jobs_fields(jobs):
-    """把 jobs 数组里的 name / category 提取并拼成字符串"""
+    """
+    传入格式:
+        jobs: list[dict] | 非 list（如 NaN、None）
+        正常时每个 dict 形如:
+        {
+            "name": "Internet Marketing",
+            "category": {"id": 6, "name": "Sales & Marketing"},
+            ...
+        }
+    输出格式:
+        pd.Series，包含 3 列:
+        - job_names: str | None
+          多个 jobs[].name 用 ", " 拼接，如 "Internet Marketing, Python"
+        - job_category_names: str | None
+          多个 jobs[].category.name 用 ", " 拼接
+        - job_category_ids: str | None
+          多个 jobs[].category.id 转成字符串后用 ", " 拼接，如 "6, 1"
+        若 jobs 不是 list，或列表为空，则三列均为 None。
+    """
     if not isinstance(jobs, list):
         return pd.Series({
             "job_names": None,
@@ -67,6 +82,8 @@ def load_one_file(path: Path) -> pd.DataFrame:
     with path.open(encoding="utf-8") as f:
         records = json.load(f)
 
+    #pd.json_normalize 是 pandas 的函数，用来把嵌套的 JSON / 字典摊平成表格（DataFrame），嵌套字段会变成带点号的列名。
+    #例如：{"category": {"id": 6, "name": "Sales & Marketing"}} 会变成 {"category.id": 6, "category.name": "Sales & Marketing"}
     df = pd.json_normalize(records)
     df["source_file"] = path.name
 
@@ -81,6 +98,11 @@ def load_one_file(path: Path) -> pd.DataFrame:
         selected[dst_col] = df[src_col] if src_col in df.columns else pd.NA
 
     result = pd.DataFrame(selected)
+
+    # jobs 衍生列不在 FIELD_MAP 里，需单独带上
+    for col in ("job_names", "job_category_names", "job_category_ids"):
+        result[col] = df[col] if col in df.columns else pd.NA
+
     result["source_file"] = df["source_file"]
     return result
 
@@ -104,15 +126,15 @@ def main():
 
     df = load_all_datasets()
 
-    # 列顺序
+    # 列名的顺序
     columns = [
         "id", "title", "url", "description", "type",
         "budget_min", "budget_max",
         "currency_code", "currency_exchange_rate",
         "commitment_hours", "commitment_interval",
         "job_names", "job_category_names", "job_category_ids",
-        "bid_count", "bid_avg", "bid_ratio",
-        "local", "location_country", "language",
+        "bid_count", "bid_avg",
+        "local", "language",
         "source_file",
     ]
     df = df[columns]
