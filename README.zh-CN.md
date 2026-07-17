@@ -60,7 +60,7 @@ Fairwork 原则 1 大致包含：
 
 Fair Pay 打分主要使用 **hourly**：能直接和 13.90 欧元/时比较。fixed 缺少可靠工时，本项目未对其打 Fair Pay 分。
 
-数据集字段、局限与再生方式见 `file/dataset说明.md`。原始 JSON 字段见 `file/rawdata说明.md`。
+数据集字段、局限与再生方式见 `file/zh/dataset说明.md`（英文：`file/en/dataset_description.md`）。原始 JSON 字段见 `file/zh/rawdata说明.md`（英文：`file/en/rawdata_description.md`）。
 
 **数据里没有的内容（影响后面能做什么）：**
 
@@ -129,7 +129,7 @@ rawdata/*.json
 
 ### 4.5 议价代理指标
 
-脚本：`bargain_analysis.py`。定义说明见 `file/议价能力.md`。
+脚本：`bargain_analysis.py`。定义说明见 `file/zh/议价能力.md`（英文：`file/en/bargaining_power.md`）。
 
 因没有单个投标与成交价，只能在**项目级**构造代理分数 `bargain_score`：
 
@@ -312,9 +312,7 @@ python main.py
 
 | 路径 | 用途 |
 |------|------|
-| `file/研究目标.md` | 研究目标与 Fair Pay 原则摘录 |
-| `file/fair pay对应打分.md` | 德国最低工资阈值说明 |
-| `file/议价能力.md` | 议价公式定义 |
-| `file/实现方案.md` / `file/数据处理.md` | 实现与清洗笔记 |
+| `file/zh/` | 中文项目文档（研究目标、Fair Pay、议价、实现方案、数据集说明等） |
+| `file/en/` | 上述文档的英文版 |
 | `file/评价标准/` | 课程 Assessment Brief 与 rubric |
 | `deepseek_ai_prompt.md` | 语言标注提示相关说明 |

@@ -60,7 +60,7 @@ Note: public postings do not show true costs, unpaid waiting time, platform fees
 
 Fair Pay scoring mainly uses **hourly** jobs, which can be compared directly to €13.90 / hour. Fixed jobs lack reliable hours, so this project does not assign them a Fair Pay score.
 
-Field notes, limits, and regeneration: `file/dataset说明.md`. Raw JSON fields: `file/rawdata说明.md`.
+Field notes, limits, and regeneration: `file/zh/dataset说明.md` (EN: `file/en/dataset_description.md`). Raw JSON fields: `file/zh/rawdata说明.md` (EN: `file/en/rawdata_description.md`).
 
 **What the data does not include (and thus constrains analysis):**
 
@@ -129,7 +129,7 @@ Output: `results/02_language_vs_score/`.
 
 ### 4.5 Bargaining proxy
 
-Script: `bargain_analysis.py`. Formula notes: `file/议价能力.md`.
+Script: `bargain_analysis.py`. Formula notes: `file/zh/议价能力.md` (EN: `file/en/bargaining_power.md`).
 
 Without individual bids or award prices, only a **project-level** proxy `bargain_score` is constructed:
 
@@ -312,9 +312,7 @@ Per-folder chart notes: `说明.md`; short write-ups: `结论.md`.
 
 | Path | Purpose |
 |------|------|
-| `file/研究目标.md` | Research aims and Fair Pay principle excerpts |
-| `file/fair pay对应打分.md` | German minimum-wage threshold notes |
-| `file/议价能力.md` | Bargaining formula definition |
-| `file/实现方案.md` / `file/数据处理.md` | Implementation and cleaning notes |
+| `file/zh/` | Chinese project docs (research aims, Fair Pay, bargain, implementation, dataset notes) |
+| `file/en/` | English counterparts of the same docs |
 | `file/评价标准/` | Course Assessment Brief and rubric |
 | `deepseek_ai_prompt.md` | Notes related to the language-labelling prompt |
