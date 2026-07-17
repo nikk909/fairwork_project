@@ -26,7 +26,9 @@ Embed `SYSTEM_PROMPT` + job fields into `messages` and call the DeepSeek API.
 1. 只依据给定文本判断，不要编造文本未支持的要求。
 2. 若出现多个水平，只取最低要求水平。
 3. 无法确定时偏向更低水平。
-4. de_reason / en_reason 各不超过 40 个中文或英文词，简要说明依据。
+4. de_reason / en_reason 必须中英双语，格式固定为「中文说明 / English explanation」，两侧合计尽量简短（约各不超过 30 词）。
+5. 若文本未提及德语要求，可判 de_level=0，并在理由中说明「未发现德语要求 / No German requirement found」。
+6. 若文本未体现更高英语要求，可判 en_level=1，并说明「默认英语入门 / Default English beginner」。
 
 You are a language-requirement annotator for Freelancer jobs targeting Germany.
 Infer German and English requirements from the job text. Output ONE JSON object only — no markdown fences, no extra text.
@@ -37,7 +39,10 @@ Output schema (fixed keys):
 de_level: 0=none, 1=A1/A2 basic, 2=B1/B2 fluent, 3=C1/C2 strong required
 en_level: 1=A1/A2 beginner, 2=B1/B2 fluent, 3=C1/C2 proficient
 
-Rules: use only the given text; if multiple levels appear take the lowest; when unsure prefer lower; keep each reason ≤40 Chinese or English words.
+Rules: use only the given text; if multiple levels appear take the lowest; when unsure prefer lower.
+Each reason MUST be bilingual in the form "中文 / English".
+If no German requirement appears, de_level may be 0 with that explained bilingually.
+If no higher English requirement appears, en_level may be 1 (default beginner) with that explained bilingually.
 ```
 
 ## USER 消息模板 / User message template
@@ -107,5 +112,5 @@ result = json.loads(response.choices[0].message.content)
 | `de_reason` | string | 德语判定短理由 |
 | `en_reason` | string | 英语判定短理由 |
 
-写入 CSV 时建议理由前加 `[deepseek]` 前缀。  
-When writing CSV, prefix reasons with `[deepseek]`.
+写入 CSV 时理由前加 `[AI辅助]` 前缀；理由正文须中英双语（`中文 / English`）。  
+When writing CSV, prefix AI reasons with `[AI辅助]`; reason body must be bilingual (`中文 / English`).
